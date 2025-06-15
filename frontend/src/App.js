@@ -14,6 +14,7 @@ function App() {
     <div>
       <h1>React + Flask App</h1>
       <p>{data}</p>
+      <p>the chnaged are reflected</p>
     </div>
   );
 }
