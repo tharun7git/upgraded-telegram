@@ -1,13 +1,21 @@
 from flask import Flask, jsonify
-from flask_cors import CORS  # to allow requests from browser
+import json
+import os
 
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
 
-@app.route("/api/data")
-def get_data():
-    return jsonify({"message": "Hello from Flask!"})
+LOG_FILE = 'change_log.json'
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+@app.route('/api/change-logs', methods=['GET'])
+def get_change_logs():
+    if not os.path.exists(LOG_FILE):
+        return jsonify([])
+    with open(LOG_FILE, 'r') as f:
+        logs = json.load(f)
+    messages = [
+        f"This message is from Flask: the code was changed at {entry['timestamp']}"
+        for entry in logs
+    ]
+    return jsonify(messages)
 
+# (keep your other routes)
